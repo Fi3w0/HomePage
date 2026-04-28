@@ -1,0 +1,31 @@
+# env / secrets
+.env
+.env.local
+.env.*.local
+*.env
+
+# os
+.DS_Store
+Thumbs.db
+
+# editors
+.vscode/
+.idea/
+*.swp
+
+# node / bun (future)
+node_modules/
+.bun/
+bun.lockb
+dist/
+build/
+.cache/
+
+# logs
+*.log
+npm-debug.log*
+
+# data / cache (future server)
+data/
+*.sqlite
+*.sqlite-journal

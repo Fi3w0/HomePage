@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en" data-theme="obsidian">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Geist:wght@300..700&family=JetBrains+Mono:wght@300..700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- atmospheric layers -->
+  <div class="bg-mesh" aria-hidden="true"></div>
+  <div class="bg-grain" aria-hidden="true"></div>
+  <div class="bg-scanlines" aria-hidden="true"></div>
+
+  <main class="page">
+
+    <!-- ─────────── masthead ─────────── -->
+    <header class="masthead">
+      <div class="masthead__left">
+        <div class="kicker">
+          <span class="kicker__dot"></span>
+          <span class="kicker__label" id="kicker-label">№ 001 · personal edition</span>
+          <span class="kicker__sep">·</span>
+          <span class="kicker__date" id="kicker-date">—</span>
+        </div>
+        <h1 class="greeting">
+          <span class="greeting__pre">good <em id="time-of-day">evening</em>,</span>
+          <span class="greeting__name" id="greeting-name">fiw</span>
+        </h1>
+      </div>
+      <div class="masthead__right">
+        <div class="clock">
+          <div class="clock__time" id="clock-time">--:--<span class="clock__sec" id="clock-sec">--</span></div>
+          <div class="clock__date" id="clock-date">—</div>
+        </div>
+        <button class="menu-btn" id="menu-btn" aria-label="open menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ─────────── search ─────────── -->
+    <section class="search-row">
+      <form class="search" id="search-form" action="https://www.google.com/search" method="get" target="_blank" rel="noopener">
+        <svg class="search__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="m20 20-3.5-3.5"/>
+        </svg>
+        <input
+          type="text"
+          name="q"
+          id="search-input"
+          class="search__input"
+          placeholder="search the web"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <kbd class="search__kbd">/</kbd>
+      </form>
+      <ul class="quicklinks" id="quicklinks">
+        <li><a class="ql" href="https://github.com" style="--ql-c:#a78bfa" target="_blank" rel="noopener"><span class="ql__dot"></span>github</a></li>
+        <li><a class="ql" href="https://youtube.com" style="--ql-c:#ef4444" target="_blank" rel="noopener"><span class="ql__dot"></span>youtube</a></li>
+        <li><a class="ql" href="https://reddit.com" style="--ql-c:#fb923c" target="_blank" rel="noopener"><span class="ql__dot"></span>reddit</a></li>
+        <li><a class="ql" href="https://mail.google.com" style="--ql-c:#60a5fa" target="_blank" rel="noopener"><span class="ql__dot"></span>mail</a></li>
+        <li><a class="ql" href="https://drive.google.com" style="--ql-c:#fbbf24" target="_blank" rel="noopener"><span class="ql__dot"></span>drive</a></li>
+        <li><a class="ql" href="https://chat.openai.com" style="--ql-c:#34d399" target="_blank" rel="noopener"><span class="ql__dot"></span>chat</a></li>
+        <li><a class="ql" href="https://twitch.tv" style="--ql-c:#c084fc" target="_blank" rel="noopener"><span class="ql__dot"></span>twitch</a></li>
+        <li><a class="ql" href="https://news.ycombinator.com" style="--ql-c:#f97316" target="_blank" rel="noopener"><span class="ql__dot"></span>hn</a></li>
+      </ul>
+    </section>
+
+    <!-- ─────────── bento grid ─────────── -->
+    <section class="bento">
+
+      <!-- ─── spotify ─── -->
+      <article class="card card--spotify" data-card="spotify" style="--delay:0">
+        <header class="card__head">
+          <span class="card__eyebrow">now playing</span>
+          <span class="card__source">spotify</span>
+        </header>
+        <a class="spotify" href="https://open.spotify.com/track/placeholder" target="_blank" rel="noopener">
+          <div class="spotify__art">
+            <div class="spotify__art-img" id="sp-art" aria-hidden="true"></div>
+            <div class="spotify__art-glow" id="sp-glow" aria-hidden="true"></div>
+          </div>
+          <div class="spotify__meta">
+            <div class="spotify__title" id="sp-title">Black Eye</div>
+            <div class="spotify__artist" id="sp-artist">Allie X</div>
+            <div class="spotify__album" id="sp-album">Cape God · 2020</div>
+            <div class="spotify__progress">
+              <div class="spotify__bar"><span id="sp-fill"></span></div>
+              <div class="spotify__times">
+                <span id="sp-cur">1:42</span>
+                <span id="sp-dur">3:48</span>
+              </div>
+            </div>
+          </div>
+          <div class="eq" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </a>
+        <div class="recent-tracks">
+          <div class="recent-tracks__label">recently played</div>
+          <ul class="recent-tracks__list">
+            <li><a href="#"><span class="recent-tracks__cover" style="--c1:#312e81;--c2:#a78bfa"></span><span class="recent-tracks__name">Sci-Fi Kid</span><span class="recent-tracks__artist">Allie X</span><span class="recent-tracks__time">12m ago</span></a></li>
+            <li><a href="#"><span class="recent-tracks__cover" style="--c1:#831843;--c2:#fb7185"></span><span class="recent-tracks__name">Reverie</span><span class="recent-tracks__artist">Aurora</span><span class="recent-tracks__time">26m ago</span></a></li>
+            <li><a href="#"><span class="recent-tracks__cover" style="--c1:#064e3b;--c2:#34d399"></span><span class="recent-tracks__name">Saturn</span><span class="recent-tracks__artist">SZA</span><span class="recent-tracks__time">38m ago</span></a></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ─── discord ─── -->
+      <article class="card card--discord" data-card="discord" style="--delay:1">
+        <header class="card__head">
+          <span class="card__eyebrow">presence</span>
+          <span class="card__source">discord</span>
+        </header>
+        <div class="discord">
+          <div class="discord__avatar">
+            <span class="discord__presence" data-presence="online"></span>
+          </div>
+          <div class="discord__main">
+            <div class="discord__name">fiw <span class="discord__tag">#0001</span></div>
+            <div class="discord__activity">
+              <span class="discord__act-label">playing</span>
+              <span class="discord__act-name">Visual Studio Code</span>
+            </div>
+            <div class="discord__act-detail">home-page · src/frontend</div>
+          </div>
+        </div>
+        <div class="discord__history">
+          <div class="discord__history-label">earlier today</div>
+          <ul class="discord__timeline">
+            <li><span class="discord__t-time">14:08</span><span class="discord__t-icon">▶</span><span class="discord__t-text">Listening — Allie X · Cape God</span></li>
+            <li><span class="discord__t-time">12:42</span><span class="discord__t-icon">⌘</span><span class="discord__t-text">Playing — Hades II</span></li>
+            <li><span class="discord__t-time">09:15</span><span class="discord__t-icon">⌬</span><span class="discord__t-text">Custom — head down, focusing</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ─── github ─── -->
+      <article class="card card--github" data-card="github" style="--delay:2">
+        <header class="card__head">
+          <span class="card__eyebrow">developer</span>
+          <a class="card__source card__source--link" href="https://github.com" target="_blank" rel="noopener">github ↗</a>
+        </header>
+        <div class="gh">
+          <div class="gh__stats">
+            <div class="gh__stat"><span class="gh__num" data-countup="7">0</span><span class="gh__lbl">today</span></div>
+            <div class="gh__stat"><span class="gh__num" data-countup="41">0</span><span class="gh__lbl">7&nbsp;days</span></div>
+            <div class="gh__stat"><span class="gh__num" data-countup="23">0</span><span class="gh__lbl">streak</span></div>
+          </div>
+          <div class="gh__heat" aria-label="contribution graph">
+            <!-- 7 weeks × 7 days mini heatmap -->
+          </div>
+          <ul class="gh__commits">
+            <li><a href="#"><span class="gh__sha">f4a2c91</span><span class="gh__msg">feat: bento layout + theme system</span><span class="gh__repo">home-page</span></a></li>
+            <li><a href="#"><span class="gh__sha">2b71e08</span><span class="gh__msg">fix: traefik labels for ws upgrade</span><span class="gh__repo">infra</span></a></li>
+            <li><a href="#"><span class="gh__sha">9d43a17</span><span class="gh__msg">refactor: rss aggregator cache layer</span><span class="gh__repo">home-page</span></a></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- ─── twitch (streamers I watch) ─── -->
+      <article class="card card--twitch" data-card="twitch" style="--delay:3">
+        <header class="card__head">
+          <span class="card__eyebrow">following</span>
+          <a class="card__source card__source--link" href="https://twitch.tv/directory/following" target="_blank" rel="noopener">twitch ↗</a>
+        </header>
+        <ul class="streamers">
+          <li><a href="https://twitch.tv/yogscast" target="_blank" rel="noopener" class="streamer streamer--live">
+            <span class="streamer__av" style="--c1:#7c3aed;--c2:#ec4899"></span>
+            <span class="streamer__main">
+              <span class="streamer__name">yogscast</span>
+              <span class="streamer__game">Hades II</span>
+            </span>
+            <span class="streamer__viewers"><span class="live-dot"></span>4.2k</span>
+          </a></li>
+          <li><a href="https://twitch.tv/distortion2" target="_blank" rel="noopener" class="streamer streamer--live">
+            <span class="streamer__av" style="--c1:#0e7490;--c2:#22d3ee"></span>
+            <span class="streamer__main">
+              <span class="streamer__name">distortion2</span>
+              <span class="streamer__game">Elden Ring</span>
+            </span>
+            <span class="streamer__viewers"><span class="live-dot"></span>1.8k</span>
+          </a></li>
+          <li><a href="https://twitch.tv/northernlion" target="_blank" rel="noopener" class="streamer">
+            <span class="streamer__av" style="--c1:#92400e;--c2:#fbbf24"></span>
+            <span class="streamer__main">
+              <span class="streamer__name">northernlion</span>
+              <span class="streamer__game">offline · last: Balatro</span>
+            </span>
+            <span class="streamer__viewers streamer__viewers--off">offline</span>
+          </a></li>
+          <li><a href="https://twitch.tv/atrioc" target="_blank" rel="noopener" class="streamer streamer--live">
+            <span class="streamer__av" style="--c1:#1e40af;--c2:#60a5fa"></span>
+            <span class="streamer__main">
+              <span class="streamer__name">atrioc</span>
+              <span class="streamer__game">Just Chatting</span>
+            </span>
+            <span class="streamer__viewers"><span class="live-dot"></span>9.1k</span>
+          </a></li>
+          <li><a href="https://twitch.tv/dougdoug" target="_blank" rel="noopener" class="streamer">
+            <span class="streamer__av" style="--c1:#065f46;--c2:#6ee7b7"></span>
+            <span class="streamer__main">
+              <span class="streamer__name">dougdoug</span>
+              <span class="streamer__game">offline · 4h ago</span>
+            </span>
+            <span class="streamer__viewers streamer__viewers--off">offline</span>
+          </a></li>
+        </ul>
+      </article>
+
+      <!-- ─── minecraft ─── -->
+      <article class="card card--mc" data-card="mc" style="--delay:4">
+        <header class="card__head">
+          <span class="card__eyebrow">homeserver</span>
+          <span class="card__source">minecraft</span>
+        </header>
+        <div class="mc">
+          <div class="mc__status">
+            <span class="live-dot live-dot--green"></span>
+            <span class="mc__status-label">online</span>
+            <span class="mc__ping">38ms</span>
+          </div>
+          <div class="mc__motd">
+            <span class="mc__motd-line1">⛏ fiw's lonely cube</span>
+            <span class="mc__motd-line2">vanilla survival · 1.21.4 · uptime 14d</span>
+          </div>
+          <div class="mc__players">
+            <div class="mc__players-num"><span data-countup="3">0</span><span class="mc__players-max">/8</span></div>
+            <ul class="mc__players-list">
+              <li><span class="mc__pl-skin" style="--c1:#a78bfa"></span>fiw</li>
+              <li><span class="mc__pl-skin" style="--c1:#34d399"></span>milo</li>
+              <li><span class="mc__pl-skin" style="--c1:#fb7185"></span>vex</li>
+            </ul>
+          </div>
+          <div class="mc__last">last login · <span>milo</span> 8m ago</div>
+        </div>
+      </article>
+
+      <!-- ─── steam recent ─── -->
+      <article class="card card--steam" data-card="steam" style="--delay:5">
+        <header class="card__head">
+          <span class="card__eyebrow">recently played</span>
+          <a class="card__source card__source--link" href="https://steamcommunity.com" target="_blank" rel="noopener">steam ↗</a>
+        </header>
+        <ul class="steam-list">
+          <li><a class="steam-game" href="https://store.steampowered.com/app/1145350" target="_blank" rel="noopener">
+            <span class="steam-game__cover" style="--c1:#7c2d12;--c2:#f97316"></span>
+            <span class="steam-game__main">
+              <span class="steam-game__name">Hades II</span>
+              <span class="steam-game__sub">last 2h ago · 42.6h total</span>
+            </span>
+            <span class="steam-game__bar"><span style="--w:84%"></span></span>
+          </a></li>
+          <li><a class="steam-game" href="https://store.steampowered.com/app/427520" target="_blank" rel="noopener">
+            <span class="steam-game__cover" style="--c1:#1e3a8a;--c2:#3b82f6"></span>
+            <span class="steam-game__main">
+              <span class="steam-game__name">Factorio</span>
+              <span class="steam-game__sub">yesterday · 31.4h total</span>
+            </span>
+            <span class="steam-game__bar"><span style="--w:62%"></span></span>
+          </a></li>
+          <li><a class="steam-game" href="https://store.steampowered.com/app/632470" target="_blank" rel="noopener">
+            <span class="steam-game__cover" style="--c1:#3f1d63;--c2:#a855f7"></span>
+            <span class="steam-game__main">
+              <span class="steam-game__name">Disco Elysium</span>
+              <span class="steam-game__sub">2 days ago · 19.2h</span>
+            </span>
+            <span class="steam-game__bar"><span style="--w:38%"></span></span>
+          </a></li>
+          <li><a class="steam-game" href="https://store.steampowered.com/app/2379780" target="_blank" rel="noopener">
+            <span class="steam-game__cover" style="--c1:#7c2d12;--c2:#fbbf24"></span>
+            <span class="steam-game__main">
+              <span class="steam-game__name">Balatro</span>
+              <span class="steam-game__sub">3 days ago · 12.0h</span>
+            </span>
+            <span class="steam-game__bar"><span style="--w:24%"></span></span>
+          </a></li>
+          <li><a class="steam-game" href="https://store.steampowered.com/app/250900" target="_blank" rel="noopener">
+            <span class="steam-game__cover" style="--c1:#0c4a6e;--c2:#22d3ee"></span>
+            <span class="steam-game__main">
+              <span class="steam-game__name">The Binding of Isaac: Rebirth</span>
+              <span class="steam-game__sub">5 days ago · 187.4h</span>
+            </span>
+            <span class="steam-game__bar"><span style="--w:18%"></span></span>
+          </a></li>
+        </ul>
+        <div class="steam-list__footer">
+          <span class="steam-list__ach-label">last achievement</span>
+          <span class="steam-list__ach">«Heir Apparent» — Hades II</span>
+        </div>
+      </article>
+
+      <!-- ─── wishlist (scrollable) ─── -->
+      <article class="card card--wishlist" data-card="wishlist" style="--delay:6">
+        <header class="card__head">
+          <span class="card__eyebrow">wishlist · price watch</span>
+          <a class="card__source card__source--link" href="https://store.steampowered.com/wishlist" target="_blank" rel="noopener">steam ↗</a>
+        </header>
+        <ul class="wishlist" id="wishlist-list">
+          <!-- populated by app.js -->
+        </ul>
+      </article>
+
+      <!-- ─── docker ─── -->
+      <article class="card card--docker" data-card="docker" style="--delay:7">
+        <header class="card__head">
+          <span class="card__eyebrow">homelab</span>
+          <span class="card__source">docker</span>
+        </header>
+        <div class="docker">
+          <div class="docker__summary">
+            <div class="docker__sum-stat"><span class="docker__sum-num" data-countup="9">0</span><span class="docker__sum-lbl">running</span></div>
+            <div class="docker__sum-stat"><span class="docker__sum-num docker__sum-num--off" data-countup="1">0</span><span class="docker__sum-lbl">stopped</span></div>
+            <div class="docker__sum-stat"><span class="docker__sum-num">11.4%</span><span class="docker__sum-lbl">cpu</span></div>
+            <div class="docker__sum-stat"><span class="docker__sum-num">2.1G</span><span class="docker__sum-lbl">ram</span></div>
+          </div>
+          <ul class="docker__list" id="docker-list">
+            <!-- populated by app.js -->
+          </ul>
+        </div>
+      </article>
+
+      <!-- ─── tech news ─── -->
+      <article class="card card--news" data-card="news-tech" style="--delay:8">
+        <header class="card__head">
+          <span class="card__eyebrow">column · tech</span>
+          <span class="card__source" id="news-tech-time">refreshed 04:00</span>
+        </header>
+        <ol class="news">
+          <li class="news__item"><span class="news__src">arstechnica</span><a class="news__title" href="#" target="_blank">AMD's RDNA 5 leaks point to monolithic flagship after MCM detour</a><span class="news__time">12m</span></li>
+          <li class="news__item"><span class="news__src">phoronix</span><a class="news__title" href="#" target="_blank">Linux 6.15 lands sched_ext default — meaningful gains on heterogeneous CPUs</a><span class="news__time">38m</span></li>
+          <li class="news__item"><span class="news__src">hn</span><a class="news__title" href="#" target="_blank">Show HN: I built a self-hosted dashboard that doesn't suck (490 points)</a><span class="news__time">1h</span></li>
+          <li class="news__item"><span class="news__src">9to5mac</span><a class="news__title" href="#" target="_blank">M5 Pro Mac mini benchmarks surface — 38% multi-core lift over M4</a><span class="news__time">2h</span></li>
+          <li class="news__item"><span class="news__src">habr</span><a class="news__title" href="#" target="_blank">Как я перенёс домашний сервер с x86 на Ampere Altra и не пожалел</a><span class="news__time">3h</span></li>
+          <li class="news__item"><span class="news__src">r/selfhosted</span><a class="news__title" href="#" target="_blank">Traefik v4 quietly broke my labels — here's the migration I wish I had</a><span class="news__time">5h</span></li>
+          <li class="news__item"><span class="news__src">ixbt</span><a class="news__title" href="#" target="_blank">Lenovo показала ThinkPad на Snapdragon X2 — автономность 22 часа</a><span class="news__time">6h</span></li>
+        </ol>
+      </article>
+
+      <!-- ─── games news ─── -->
+      <article class="card card--news" data-card="news-games" style="--delay:9">
+        <header class="card__head">
+          <span class="card__eyebrow">column · games</span>
+          <span class="card__source" id="news-games-time">refreshed 04:00</span>
+        </header>
+        <ol class="news">
+          <li class="news__item"><span class="news__src">steam</span><a class="news__title" href="#" target="_blank">Hades II leaves early access October 14 with full Olympus epilogue</a><span class="news__time">22m</span></li>
+          <li class="news__item"><span class="news__src">rps</span><a class="news__title" href="#" target="_blank">Silksong release window narrowed to Q1 — Team Cherry breaks silence</a><span class="news__time">1h</span></li>
+          <li class="news__item"><span class="news__src">pcgamer</span><a class="news__title" href="#" target="_blank">Factorio 2.1 expansion teaser shows planet-spanning logistic networks</a><span class="news__time">2h</span></li>
+          <li class="news__item"><span class="news__src">stopgame</span><a class="news__title" href="#" target="_blank">Обзор Disco Elysium: Final Cut спустя три года — текст всё ещё лучший</a><span class="news__time">4h</span></li>
+          <li class="news__item"><span class="news__src">steam</span><a class="news__title" href="#" target="_blank">Balatro Friends of Jimbo Vol. 4 adds 12 crossover decks for free</a><span class="news__time">6h</span></li>
+          <li class="news__item"><span class="news__src">r/games</span><a class="news__title" href="#" target="_blank">Valve confirms SteamOS 4.0 ships with Plasma 6.4, ROCm 7</a><span class="news__time">8h</span></li>
+          <li class="news__item"><span class="news__src">stopgame</span><a class="news__title" href="#" target="_blank">Cyberpunk 2 в препродакшене — CDPR подтвердил движок Unreal 5.6</a><span class="news__time">10h</span></li>
+        </ol>
+      </article>
+
+    </section>
+
+    <!-- ─────────── colophon ─────────── -->
+    <footer class="colophon">
+      <span class="colophon__left">synced <span id="last-sync">just now</span> · placeholder data</span>
+      <span class="colophon__center" id="colophon-quote">— if found, please return to firefox.</span>
+      <span class="colophon__right">home · v0.1 · preview</span>
+    </footer>
+  </main>
+
+  <!-- ─────────── settings panel ─────────── -->
+  <aside class="panel" id="panel" aria-hidden="true">
+    <div class="panel__scrim" data-close></div>
+    <div class="panel__sheet">
+      <header class="panel__head">
+        <h2 class="panel__title">settings</h2>
+        <button class="panel__close" data-close aria-label="close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </header>
+
+      <div class="panel__body">
+
+        <section class="panel__section">
+          <h3 class="panel__section-title">theme</h3>
+          <div class="theme-grid">
+            <button class="theme-card" data-theme-set="obsidian">
+              <span class="theme-card__swatch" style="--a:#0a0908;--b:#d97706;--c:#1c1917"></span>
+              <span class="theme-card__name">Obsidian</span>
+              <span class="theme-card__sub">copper on bitumen</span>
+            </button>
+            <button class="theme-card" data-theme-set="neon">
+              <span class="theme-card__swatch" style="--a:#07021a;--b:#ff2d95;--c:#00f0ff"></span>
+              <span class="theme-card__name">Neon Tokyo</span>
+              <span class="theme-card__sub">midnight scanlines</span>
+            </button>
+            <button class="theme-card" data-theme-set="paper">
+              <span class="theme-card__swatch" style="--a:#f3eee2;--b:#b91c1c;--c:#1a1614"></span>
+              <span class="theme-card__name">Paperwhite</span>
+              <span class="theme-card__sub">newsprint &amp; ink</span>
+            </button>
+            <button class="theme-card" data-theme-set="catppuccin">
+              <span class="theme-card__swatch" style="--a:#1e1e2e;--b:#cba6f7;--c:#89b4fa"></span>
+              <span class="theme-card__name">Catppuccin</span>
+              <span class="theme-card__sub">mocha · soothing pastels</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="panel__section">
+          <h3 class="panel__section-title">appearance</h3>
+          <label class="row"><span>show seconds</span><input type="checkbox" data-setting="seconds" class="toggle"></label>
+          <label class="row"><span>grain texture</span><input type="checkbox" data-setting="grain" class="toggle" checked></label>
+          <label class="row"><span>animated background</span><input type="checkbox" data-setting="bgAnim" class="toggle" checked></label>
+          <label class="row"><span>compact density</span><input type="checkbox" data-setting="compact" class="toggle"></label>
+        </section>
+
+        <section class="panel__section">
+          <h3 class="panel__section-title">silly</h3>
+          <label class="row"><span>confetti easter eggs <em>(click greeting × 5)</em></span><input type="checkbox" data-setting="confetti" class="toggle"></label>
+          <label class="row"><span>cursor sparkles</span><input type="checkbox" data-setting="cursor" class="toggle"></label>
+          <label class="row"><span>rotate page on shake</span><input type="checkbox" data-setting="tilt" class="toggle"></label>
+          <label class="row row--select">
+            <span>greeting style</span>
+            <select data-setting="greetingStyle" class="select">
+              <option value="formal">formal</option>
+              <option value="casual">casual</option>
+              <option value="pirate">pirate</option>
+              <option value="haiku">haiku</option>
+              <option value="l33t">l33t</option>
+            </select>
+          </label>
+          <label class="row row--input">
+            <span>your name</span>
+            <input type="text" data-setting="name" class="input" placeholder="fiw" maxlength="14">
+          </label>
+        </section>
+
+        <section class="panel__section">
+          <h3 class="panel__section-title">widgets</h3>
+          <label class="row"><span>spotify</span><input type="checkbox" data-toggle="spotify" class="toggle" checked></label>
+          <label class="row"><span>discord</span><input type="checkbox" data-toggle="discord" class="toggle" checked></label>
+          <label class="row"><span>github</span><input type="checkbox" data-toggle="github" class="toggle" checked></label>
+          <label class="row"><span>twitch</span><input type="checkbox" data-toggle="twitch" class="toggle" checked></label>
+          <label class="row"><span>steam recent</span><input type="checkbox" data-toggle="steam" class="toggle" checked></label>
+          <label class="row"><span>minecraft</span><input type="checkbox" data-toggle="mc" class="toggle" checked></label>
+          <label class="row"><span>wishlist</span><input type="checkbox" data-toggle="wishlist" class="toggle" checked></label>
+          <label class="row"><span>docker</span><input type="checkbox" data-toggle="docker" class="toggle" checked></label>
+          <label class="row"><span>tech news</span><input type="checkbox" data-toggle="news-tech" class="toggle" checked></label>
+          <label class="row"><span>game news</span><input type="checkbox" data-toggle="news-games" class="toggle" checked></label>
+        </section>
+
+        <section class="panel__section">
+          <button class="panel__btn" id="reset-btn">reset all settings</button>
+        </section>
+
+        <footer class="panel__foot">
+          home · v0.1 preview · made for fiw
+        </footer>
+      </div>
+    </div>
+  </aside>
+
+  <!-- confetti container -->
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
