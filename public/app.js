@@ -353,13 +353,33 @@
     if (el) el.textContent = '— ' + QUOTES[Math.floor(Math.random() * QUOTES.length)];
   }
 
-  // ─────────── last sync flicker ───────────
-  function tickSync() {
+  // ─────────── api ───────────
+  // helper used by every provider in Phase 1: returns parsed JSON on 2xx,
+  // null on anything else, so callers can do `data ?? mock` and the page
+  // never breaks while a provider is unwired.
+  async function apiGet(path, { timeout = 4000 } = {}) {
+    try {
+      const ctl = new AbortController();
+      const t = setTimeout(() => ctl.abort(), timeout);
+      const r = await fetch(path, { signal: ctl.signal, headers: { accept: 'application/json' } });
+      clearTimeout(t);
+      if (!r.ok) return null;
+      return await r.json();
+    } catch { return null; }
+  }
+  window.api = { get: apiGet };
+
+  async function pingHealth() {
     const el = $('#last-sync');
     if (!el) return;
-    const opts = ['just now','12s ago','28s ago','46s ago','1m ago'];
-    let i = 0;
-    setInterval(() => { el.textContent = opts[i = (i + 1) % opts.length]; }, 7000);
+    const h = await apiGet('/api/health', { timeout: 2500 });
+    el.textContent = h?.ok ? 'just now · api ok' : 'placeholder · api offline';
+  }
+
+  // ─────────── last sync ───────────
+  function tickSync() {
+    pingHealth();
+    setInterval(pingHealth, 30_000);
   }
 
   // ─────────── init ───────────

@@ -1,0 +1,17 @@
+.git
+.gitignore
+.dockerignore
+.env
+.env.*
+!.env.example
+data/
+node_modules
+**/node_modules
+*.sqlite
+*.sqlite-journal
+*.log
+.DS_Store
+.vscode
+.idea
+.claude
+README.md
