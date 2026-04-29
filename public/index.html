@@ -10,8 +10,8 @@
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Geist:wght@300..700&family=JetBrains+Mono:wght@300..700&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="styles.css?v=9" />
-  <link rel="stylesheet" href="tweaks.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=11" />
+  <link rel="stylesheet" href="tweaks.css?v=5" />
 </head>
 <body>
   <!-- atmospheric layers -->
@@ -109,7 +109,7 @@
             <div class="spotify__title" id="sp-title">Black Eye</div>
             <div class="spotify__artist" id="sp-artist">Allie X</div>
             <div class="spotify__album" id="sp-album">Cape God · 2020 · track 04 of 12</div>
-            <div class="spotify__progress">
+            <div class="spotify__progress" id="sp-progress" style="display:none">
               <div class="spotify__bar"><span id="sp-fill"></span></div>
               <div class="spotify__times">
                 <span id="sp-cur">1:42</span>
@@ -123,12 +123,7 @@
         </a>
         <div class="recent-tracks">
           <div class="recent-tracks__label">recently played · 24h</div>
-          <ul class="recent-tracks__list">
-            <li><a href="#"><span class="recent-tracks__cover" style="--c1:#312e81;--c2:#a78bfa"></span><span class="recent-tracks__name">Sci-Fi Kid</span><span class="recent-tracks__artist">Allie X</span><span class="recent-tracks__time">12m ago</span></a></li>
-            <li><a href="#"><span class="recent-tracks__cover" style="--c1:#831843;--c2:#fb7185"></span><span class="recent-tracks__name">Reverie</span><span class="recent-tracks__artist">Aurora</span><span class="recent-tracks__time">26m ago</span></a></li>
-            <li><a href="#"><span class="recent-tracks__cover" style="--c1:#064e3b;--c2:#34d399"></span><span class="recent-tracks__name">Saturn</span><span class="recent-tracks__artist">SZA</span><span class="recent-tracks__time">38m ago</span></a></li>
-            <li><a href="#"><span class="recent-tracks__cover" style="--c1:#1c1917;--c2:#f59e0b"></span><span class="recent-tracks__name">Ribs</span><span class="recent-tracks__artist">Lorde</span><span class="recent-tracks__time">52m ago</span></a></li>
-          </ul>
+          <ul class="recent-tracks__list"></ul>
         </div>
       </article>
 
@@ -185,11 +180,7 @@
             <div class="gh__heat-labels"><span>m</span><span></span><span>w</span><span></span><span>f</span><span></span><span>s</span></div>
             <div class="gh__heat" aria-label="contribution graph"></div>
           </div>
-          <ul class="gh__commits">
-            <li><a href="#"><span class="gh__sha">f4a2c91</span><span class="gh__msg">feat: bento layout + theme system</span><span class="gh__repo">home-page</span></a></li>
-            <li><a href="#"><span class="gh__sha">2b71e08</span><span class="gh__msg">fix: traefik labels for ws upgrade</span><span class="gh__repo">infra</span></a></li>
-            <li><a href="#"><span class="gh__sha">9d43a17</span><span class="gh__msg">refactor: rss aggregator cache layer</span><span class="gh__repo">home-page</span></a></li>
-          </ul>
+          <ul class="gh__commits"></ul>
         </div>
       </article>
 
@@ -319,7 +310,6 @@
             </div>
           </div>
 
-          <div class="mc__last">last login · <span id="mc-last-name">milo</span> · <span id="mc-last-time">8m ago</span></div>
         </div>
       </article>
 
@@ -616,6 +606,6 @@
   <!-- confetti container -->
   <div class="confetti" id="confetti" aria-hidden="true"></div>
 
-  <script src="app.js?v=9"></script>
+  <script src="app.v2.js?v=1"></script>
 </body>
 </html>

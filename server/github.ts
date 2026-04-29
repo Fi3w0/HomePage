@@ -7,6 +7,7 @@ export interface GithubActivity {
   streak: number;
   heatmap: number[]; // 98 values (14 weeks × 7 days), level 0-4
   commits: Array<{ sha: string; message: string; repo: string; url: string }>;
+  user: string;
 }
 
 async function gql(query: string) {
@@ -38,13 +39,14 @@ async function rest(path: string) {
 export async function getGithubActivity(): Promise<GithubActivity | null> {
   if (!GH_TOKEN) return null;
   try {
-    // from = 14 weeks ago
+    // from = 14 weeks ago, to = today
     const from = new Date(Date.now() - 98 * 86400_000).toISOString();
+    const to = new Date().toISOString();
 
     const [graphRes, events] = await Promise.all([
       gql(`{
         user(login: "${GH_USER}") {
-          contributionsCollection(from: "${from}") {
+          contributionsCollection(from: "${from}", to: "${to}") {
             contributionCalendar {
               weeks {
                 contributionDays { contributionCount date }
@@ -88,6 +90,7 @@ export async function getGithubActivity(): Promise<GithubActivity | null> {
     // Heatmap: last 98 days, levels 0-4
     const last98 = allDays.slice(-98);
     while (last98.length < 98) last98.unshift({ count: 0, date: "" });
+    const nonZeroHeat = last98.filter(d => d.count > 0).length;
     const heatmap = last98.map(({ count: c }) => {
       if (c === 0) return 0;
       if (c <= 2) return 1;
@@ -96,23 +99,34 @@ export async function getGithubActivity(): Promise<GithubActivity | null> {
       return 4;
     });
 
-    // Recent commits from PushEvents
+    // Recent commits: try commit API for each repo from push events
     const commits: GithubActivity["commits"] = [];
+    const seenRepos = new Set<string>();
     for (const ev of Array.isArray(events) ? events : []) {
       if (ev.type !== "PushEvent") continue;
-      for (const c of ev.payload?.commits ?? []) {
-        if (commits.length >= 5) break;
-        commits.push({
-          sha: c.sha.slice(0, 7),
-          message: c.message.split("\n")[0].slice(0, 72),
-          repo: String(ev.repo?.name ?? "").split("/")[1] ?? ev.repo?.name ?? "?",
-          url: `https://github.com/${ev.repo?.name}/commit/${c.sha}`,
-        });
-      }
+      const repoName = ev.repo?.name ?? "";
+      if (!repoName || seenRepos.has(repoName)) continue;
+      seenRepos.add(repoName);
+      const ref = (ev.payload?.ref ?? "main").replace("refs/heads/", "");
+      // Fetch recent commits for this repo's default branch
+      try {
+        const commitsRes = await rest(`/repos/${repoName}/commits?sha=${ref}&per_page=3&author=${GH_USER}`);
+        if (Array.isArray(commitsRes)) {
+          for (const c of commitsRes) {
+            if (commits.length >= 5) break;
+            commits.push({
+              sha: (c.sha ?? "").slice(0, 7),
+              message: (c.commit?.message ?? "").split("\n")[0].slice(0, 72),
+              repo: repoName.split("/")[1] ?? repoName,
+              url: c.html_url ?? `https://github.com/${repoName}/commit/${c.sha}`,
+            });
+          }
+        }
+      } catch { /* skip repos that fail */ }
       if (commits.length >= 5) break;
     }
 
-    return { today: todayCount, week: weekCount, streak, heatmap, commits };
+    return { today: todayCount, week: weekCount, streak, heatmap, commits, user: GH_USER };
   } catch (e) {
     console.error("GitHub error:", e);
     return null;

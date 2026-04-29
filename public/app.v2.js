@@ -715,18 +715,17 @@
     if (d.heatmap) buildHeatmap(d.heatmap);
 
     const ul = $('.gh__commits');
-    if (ul && d.commits?.length) {
-      ul.replaceChildren();
-      d.commits.slice(0, 4).forEach(c => {
-        const li = document.createElement('li');
-        const a  = document.createElement('a');
-        a.href = c.url; a.target = '_blank'; a.rel = 'noopener';
-        const sha  = document.createElement('span'); sha.className  = 'gh__sha';  sha.textContent = c.sha;
-        const msg  = document.createElement('span'); msg.className  = 'gh__msg';  msg.textContent = c.message;
-        const repo = document.createElement('span'); repo.className = 'gh__repo'; repo.textContent = c.repo;
-        a.append(sha, msg, repo); li.appendChild(a); ul.appendChild(li);
-      });
-    }
+    if (!ul) return;
+    ul.replaceChildren();
+    (d.commits ?? []).slice(0, 4).forEach(c => {
+      const li = document.createElement('li');
+      const a  = document.createElement('a');
+      a.href = c.url; a.target = '_blank'; a.rel = 'noopener';
+      const sha  = document.createElement('span'); sha.className  = 'gh__sha';  sha.textContent = c.sha;
+      const msg  = document.createElement('span'); msg.className  = 'gh__msg';  msg.textContent = c.message;
+      const repo = document.createElement('span'); repo.className = 'gh__repo'; repo.textContent = c.repo;
+      a.append(sha, msg, repo); li.appendChild(a); ul.appendChild(li);
+    });
 
     // Update github link to user profile
     const link = $('[data-card="github"] .card__source--link');
@@ -734,6 +733,92 @@
   }
 
   async function loadGithub() { renderGithub(await apiGet('/api/github/activity', { timeout: 8000 })); }
+
+  // ─────────── spotify ───────────
+  function fmtMs(ms) {
+    const m = Math.floor(ms / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  }
+
+  function fmtTimeAgo(iso) {
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return `${m}m ago`;
+    const h = Math.floor(m / 60);
+    return `${h}h ago`;
+  }
+
+  function renderSpotify(d) {
+    if (!d) return;
+    const card = $('[data-card="spotify"]');
+    if (!card) return;
+
+    const eyebrow = card.querySelector('.card__eyebrow');
+    const link = card.querySelector('.spotify');
+    const art = $('#sp-art');
+    const title = $('#sp-title');
+    const artist = $('#sp-artist');
+    const album = $('#sp-album');
+    const fill = $('#sp-fill');
+    const cur = $('#sp-cur');
+    const dur = $('#sp-dur');
+    const eq = card.querySelector('.eq');
+    const recentList = $('.recent-tracks__list');
+
+    if (d.now && d.now.is_playing) {
+      if (eyebrow) eyebrow.innerHTML = '<span class="live-dot live-dot--green"></span>now playing';
+      if (link) link.href = `https://www.last.fm/user/${d.user ?? 'Fi3w0'}`;
+      if (art) art.style.background = `url(${d.now.album_art_url || ''}) center/cover`;
+      if (title) title.textContent = d.now.song;
+      if (artist) artist.textContent = d.now.artist;
+      if (album) album.textContent = d.now.album;
+      if (fill) fill.style.transform = 'scaleX(1)';
+      if (cur) cur.textContent = 'LIVE';
+      if (dur) dur.textContent = '';
+      card.classList.add('spotify--playing');
+      if (eq) eq.classList.add('eq--playing');
+    } else {
+      if (eyebrow) eyebrow.innerHTML = '<span class="live-dot live-dot--dim"></span>paused';
+      if (art) art.style.background =
+        'radial-gradient(120% 120% at 30% 20%, #f9a8d4 0%, transparent 55%), radial-gradient(140% 140% at 80% 80%, #4c1d95 0%, transparent 60%), linear-gradient(135deg, #831843 0%, #1e1b4b 100%)';
+      if (title) title.textContent = d.now?.song ?? '—';
+      if (artist) artist.textContent = d.now?.artist ?? '';
+      if (album) album.textContent = d.now?.album ?? '';
+      card.classList.remove('spotify--playing');
+      if (eq) eq.classList.remove('eq--playing');
+      if (fill) fill.style.transform = 'scaleX(0)';
+      if (cur) cur.textContent = '0:00';
+      if (dur) dur.textContent = '0:00';
+    }
+
+    if (recentList && d.recent?.length) {
+      recentList.replaceChildren();
+      d.recent.forEach(t => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#';
+        const cover = document.createElement('span');
+        cover.className = 'recent-tracks__cover';
+        cover.style.background = `url(${t.album_art_url}) center/cover`;
+        const name = document.createElement('span');
+        name.className = 'recent-tracks__name';
+        name.textContent = t.song;
+        const artEl = document.createElement('span');
+        artEl.className = 'recent-tracks__artist';
+        artEl.textContent = t.artist;
+        const time = document.createElement('span');
+        time.className = 'recent-tracks__time';
+        time.textContent = fmtTimeAgo(t.played_at);
+        a.append(cover, name, artEl, time);
+        li.appendChild(a);
+        recentList.appendChild(li);
+      });
+    }
+  }
+
+  async function loadSpotify() { renderSpotify(await apiGet('/api/spotify/data', { timeout: 8000 })); }
 
   // ─────────── twitch ───────────
   function fmtViewers(n) {
@@ -982,7 +1067,7 @@
     updateClock();
     setInterval(updateClock, 1000);
     setInterval(updateGreeting, 60_000);
-    buildHeatmap(); // synthetic until github loads
+    buildHeatmap();
     renderDocker();
     bindPanel();
     bindSearch();
@@ -995,6 +1080,7 @@
 
     // providers — graceful: keep mock layout if api returns null
     loadMc();
+    loadSpotify();
     loadGithub();
     loadTwitch();
     loadDiscord();
@@ -1003,6 +1089,7 @@
     loadNews();
 
     setInterval(loadMc,       30_000);
+    setInterval(loadSpotify,  30_000);
     setInterval(loadTwitch,   90_000);
     setInterval(loadDiscord,  60_000);
     setInterval(loadSteam,    15 * 60_000);

@@ -710,7 +710,7 @@ input, select, button { font: inherit; }
   color: var(--muted);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .spotify__progress { max-width: 320px; }
 .spotify__bar {
@@ -740,8 +740,8 @@ input, select, button { font: inherit; }
 
 .eq {
   display: flex; align-items: flex-end; gap: 3px;
-  height: 24px;
-  margin-top: 12px;
+  height: 20px;
+  margin-top: 8px;
 }
 .eq span {
   display: block; width: 3px;
@@ -765,8 +765,8 @@ input, select, button { font: inherit; }
 @keyframes eq { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
 
 .recent-tracks {
-  margin-top: 18px;
-  padding-top: 14px;
+  margin-top: 12px;
+  padding-top: 10px;
   border-top: 1px dashed var(--hairline);
 }
 .recent-tracks__label {
@@ -1322,18 +1322,6 @@ input, select, button { font: inherit; }
   width: 8px; height: 8px; border-radius: 1px;
   background: var(--c1);
 }
-.mc__last {
-  margin-top: auto;
-  padding-top: 8px;
-  border-top: 1px dashed var(--hairline);
-  font-family: var(--f-mono);
-  font-size: 10px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-.mc__last span { color: var(--accent); }
-
 /* weather chart SVG line overlay */
 .wx__hours { position: relative; }
 .wx__line-svg {

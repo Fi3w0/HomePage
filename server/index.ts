@@ -6,6 +6,7 @@ import { getTwitchFollowing, type TwitchStreamer } from "./twitch";
 import { getDiscordPresence, type DiscordPresence } from "./discord";
 import { getSteamRecent, getSteamWishlist, type SteamRecent } from "./steam";
 import { getTechNews, getGamesNews, type NewsData } from "./news";
+import { getSpotifyData, type SpotifyData } from "./spotify";
 
 const PORT = Number(process.env.PORT ?? 3000);
 const PUBLIC_DIR = new URL("../public/", import.meta.url).pathname;
@@ -15,7 +16,7 @@ const MC_PORT = Number(process.env.MC_PORT ?? 25565);
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
-    headers: { "content-type": "application/json; charset=utf-8" },
+    headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-cache" },
   });
 
 const notImplemented = (provider: string) =>
@@ -40,6 +41,7 @@ async function getMcStatus(): Promise<McStatus> {
   return data;
 }
 
+const getCachedSpotify   = makeCache(30_000,        getSpotifyData);
 const getCachedGithub    = makeCache(5 * 60_000,   getGithubActivity);
 const getCachedTwitch    = makeCache(60_000,        getTwitchFollowing);
 const getCachedDiscord   = makeCache(60_000,        getDiscordPresence);
@@ -76,8 +78,10 @@ const apiRoutes: Record<string, () => Response | Promise<Response>> = {
     const d = await getCachedGamesNews();
     return d ? json(d) : notImplemented("news");
   },
-  "/api/spotify/now":       () => notImplemented("spotify"),
-  "/api/spotify/recent":    () => notImplemented("spotify"),
+  "/api/spotify/data":      async () => {
+    const d = await getCachedSpotify();
+    return d ? json(d) : notImplemented("spotify");
+  },
   "/api/discord/presence":  async () => {
     const d = await getCachedDiscord();
     return d ? json(d) : notImplemented("discord");
