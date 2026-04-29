@@ -15,10 +15,20 @@ const MC_HOST = process.env.MC_HOST ?? "minecraft-main";
 const MC_PORT = Number(process.env.MC_PORT ?? 25565);
 const DOCKER_SOCKET = process.env.DOCKER_SOCKET ?? "/var/run/docker.sock";
 
+function secureHeaders(headers: Record<string, string> = {}): Record<string, string> {
+  return {
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "referrer-policy": "no-referrer",
+    "permissions-policy": "camera=(), microphone=(), geolocation=()",
+    ...headers,
+  };
+}
+
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
-    headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-cache" },
+    headers: secureHeaders({ "content-type": "application/json; charset=utf-8", "cache-control": "no-cache" }),
   });
 
 const notImplemented = (provider: string) =>
@@ -124,13 +134,15 @@ const apiRoutes: Record<string, () => Response | Promise<Response>> = {
 
 async function serveStatic(pathname: string): Promise<Response> {
   const rel = pathname === "/" ? "/index.html" : pathname;
-  const safe = normalize(rel).replace(/^(\.\.[/\\])+/, "");
+  const safe = normalize(rel).replace(/^(\.\.(\/|\\))+/, "");
   const full = join(PUBLIC_DIR, safe);
-  if (!full.startsWith(PUBLIC_DIR)) return new Response("forbidden", { status: 403 });
+  if (!full.startsWith(PUBLIC_DIR.replace(/\/$/, "") + "/") && full !== PUBLIC_DIR.replace(/\/$/, "")) {
+    return new Response("forbidden", { status: 403 });
+  }
   const f = file(full);
   if (!(await f.exists())) return new Response("not found", { status: 404 });
   return new Response(f, {
-    headers: { "cache-control": "no-cache, must-revalidate" },
+    headers: secureHeaders({ "cache-control": "no-cache, must-revalidate" }),
   });
 }
 

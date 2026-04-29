@@ -76,7 +76,7 @@
     );
 
     const gn = $('#greeting-name'); if (gn) gn.textContent = state.name || 'fiw';
-    const dekEl = $('#dek'); if (dekEl && state.dek) dekEl.innerHTML = state.dek;
+    const dekEl = $('#dek'); if (dekEl && state.dek) dekEl.textContent = state.dek;
 
     renderRock();
     updateGreeting();
@@ -603,8 +603,10 @@
       ul.replaceChildren();
       state.quicklinks.filter(q => q.label && q.url).forEach(q => {
         const li = document.createElement('li');
-        li.innerHTML = `<a class="ql" href="${q.url}" style="--ql-c:${q.color}"><span class="ql__dot"></span>${q.label}</a>`;
-        ul.appendChild(li);
+        const a = document.createElement('a'); a.className = 'ql'; a.href = q.url; a.style.setProperty('--ql-c', q.color);
+        const dot = document.createElement('span'); dot.className = 'ql__dot';
+        a.append(dot, document.createTextNode(q.label));
+        li.appendChild(a); ul.appendChild(li);
       });
     }
   }
