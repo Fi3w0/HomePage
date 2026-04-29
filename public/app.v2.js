@@ -22,6 +22,15 @@
       spotify:true, discord:true, github:true, twitch:true,
       steam:true, mc:true, wishlist:true, docker:true, 'news-tech':true, 'news-games':true,
     },
+    quicklinks: [
+      { label: 'github', url: 'https://github.com', color: '#a78bfa' },
+      { label: 'youtube', url: 'https://youtube.com', color: '#ef4444' },
+      { label: 'reddit', url: 'https://reddit.com', color: '#fb923c' },
+      { label: 'mail', url: 'https://mail.google.com', color: '#60a5fa' },
+      { label: 'claude', url: 'https://claude.ai', color: '#d97706' },
+      { label: 'twitch', url: 'https://twitch.tv', color: '#c084fc' },
+      { label: 'hn', url: 'https://news.ycombinator.com', color: '#f97316' },
+    ],
   };
   const load = () => {
     try {
@@ -67,7 +76,7 @@
     );
 
     const gn = $('#greeting-name'); if (gn) gn.textContent = state.name || 'fiw';
-    const dekEl = $('#dek'); if (dekEl && state.dek) dekEl.textContent = state.dek;
+    const dekEl = $('#dek'); if (dekEl && state.dek) dekEl.innerHTML = state.dek;
 
     renderRock();
     updateGreeting();
@@ -553,14 +562,51 @@
       if (!confirm('reset all settings?')) return;
       localStorage.removeItem(KEY);
       Object.assign(state, JSON.parse(JSON.stringify(defaults)));
+      save(); apply();
+      renderQuicklinks();
+      // re-bind panel after defaults restore
       $$('[data-setting]', panel).forEach(el => {
         const key = el.dataset.setting;
         if (el.type === 'checkbox') el.checked = !!state[key];
         else el.value = state[key] ?? '';
       });
-      $$('[data-toggle]', panel).forEach(el => { el.checked = state.widgets[el.dataset.toggle] !== false; });
-      apply();
     });
+
+    renderQuicklinks();
+    $('#ql-add-btn').addEventListener('click', () => {
+      state.quicklinks.push({ label: '', url: '', color: '#a78bfa' });
+      save();
+      renderQuicklinks();
+    });
+  }
+
+  // ─────────── quicklinks editor ───────────
+  function renderQuicklinks() {
+    const editor = $('#ql-editor');
+    if (!editor) return;
+    editor.replaceChildren();
+    state.quicklinks.forEach((ql, i) => {
+      const row = document.createElement('div'); row.className = 'ql-row';
+      const lbl = document.createElement('input'); lbl.type = 'text'; lbl.placeholder = 'label'; lbl.className = 'input ql-row__lbl'; lbl.value = ql.label;
+      const url = document.createElement('input'); url.type = 'text'; url.placeholder = 'url'; url.className = 'input ql-row__url'; url.value = ql.url;
+      const col = document.createElement('input'); col.type = 'color'; col.className = 'ql-row__col'; col.value = ql.color;
+      const del = document.createElement('button'); del.className = 'ql-row__del'; del.textContent = '✕';
+      lbl.addEventListener('input', () => { state.quicklinks[i].label = lbl.value; save(); renderQuicklinks(); });
+      url.addEventListener('input', () => { state.quicklinks[i].url = url.value; save(); renderQuicklinks(); });
+      col.addEventListener('input', () => { state.quicklinks[i].color = col.value; save(); renderQuicklinks(); });
+      del.addEventListener('click', () => { state.quicklinks.splice(i, 1); save(); renderQuicklinks(); });
+      row.append(lbl, url, col, del); editor.appendChild(row);
+    });
+    // Render the actual quicklinks bar
+    const ul = $('#quicklinks');
+    if (ul) {
+      ul.replaceChildren();
+      state.quicklinks.filter(q => q.label && q.url).forEach(q => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a class="ql" href="${q.url}" style="--ql-c:${q.color}"><span class="ql__dot"></span>${q.label}</a>`;
+        ul.appendChild(li);
+      });
+    }
   }
 
   // ─────────── confetti ───────────
@@ -627,10 +673,44 @@
     'today is a good day to refactor.',
     'localhost, made personal.',
     'rss is not dead. it just got quieter.',
+    'a quiet desk, a warm terminal — three things on the list today, and the kettle just clicked off.',
+    'the terminal never judges your typos.',
+    'commit often. refactor bravely. ship with confidence.',
+    'every great system started with a single import.',
+    'some bugs whisper. others stare you in the face until 3am.',
+    'the most elegant code is the code you never had to write.',
+    'readme driven development — start with the story.',
+    'your homelab is a love letter to yourself.',
+    'containers are just very opinionated suitcases.',
+    'the ssh session that never closes.',
+    'git log is a time machine with accountability.',
+    'docker-compose up — the modern equivalent of lighting a beacon.',
+    'a fresh database is like a blank notebook.',
+    'the best error message is the one you never see.',
+    'documentation is a gift to your future self.',
+  ];
+  const DEKS = [
+    'a quiet desk, a warm terminal — <span class="dek__accent">three things on the list today</span>, and the kettle just clicked off.',
+    'the screen glows. the fans hum. <span class="dek__accent">all is right with the world.</span>',
+    'another <span class="dek__accent">layer of abstraction</span> between you and the void.',
+    'pixels arranged. <span class="dek__accent">fonts selected.</span> peace achieved.',
+    'containers up. services green. <span class="dek__accent">nothing is on fire.</span>',
+    'one more <span class="dek__accent">git push</span> before the coffee runs out.',
+    'you are exactly where you need to be — <span class="dek__accent">in the terminal.</span>',
+    'the only downtime today is <span class="dek__accent">for yourself.</span>',
+    'no meetings. no alerts. <span class="dek__accent">just code.</span>',
+    'a fresh branch. a blank screen. <span class="dek__accent">infinite possibility.</span>',
+    'the build passed. the tests are green. <span class="dek__accent">the machine approves.</span>',
+    'everything runs in containers — <span class="dek__accent">including your focus.</span>',
+    'localhost:<span class="dek__accent">3000</span> — the most comforting port number.',
+    'system uptime: healthy. <span class="dek__accent">mental uptime: pending.</span>',
+    'the only 404 here is <span class="dek__accent">your motivation to close the lid.</span>',
   ];
   function rotateQuote() {
     const el = $('#colophon-quote');
     if (el) el.textContent = '— ' + QUOTES[Math.floor(Math.random() * QUOTES.length)];
+    const dek = $('#dek');
+    if (dek && !state.dek) dek.innerHTML = DEKS[Math.floor(Math.random() * DEKS.length)];
   }
 
   // ─────────── api helper ───────────
@@ -1055,6 +1135,7 @@
     bindEasterEggs();
     bindEditMode();
     rotateQuote();
+    setInterval(rotateQuote, 30_000);
     tickSync();
     setTimeout(animateCountUps, 350);
 

@@ -10,8 +10,8 @@
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Geist:wght@300..700&family=JetBrains+Mono:wght@300..700&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="styles.css?v=18" />
-  <link rel="stylesheet" href="tweaks.css?v=9" />
+  <link rel="stylesheet" href="styles.css?v=21" />
+  <link rel="stylesheet" href="tweaks.css?v=12" />
 </head>
 <body>
   <!-- atmospheric layers -->
@@ -35,9 +35,7 @@
           <span class="greeting__name" id="greeting-name">fiw</span>
           <span class="greeting__caret">.</span>
         </h1>
-        <p class="dek" id="dek">
-          a quiet desk, a warm terminal — <span class="dek__accent">three things on the list today</span>, and the kettle just clicked off.
-        </p>
+        <p class="dek" id="dek"></p>
       </div>
       <div class="masthead__right">
         <div class="clock">
@@ -516,6 +514,12 @@
         </section>
 
         <section class="panel__section">
+          <h3 class="panel__section-title">quicklinks</h3>
+          <div id="ql-editor"></div>
+          <button class="panel__btn panel__btn--sec" id="ql-add-btn">+ add link</button>
+        </section>
+
+        <section class="panel__section">
           <h3 class="panel__section-title">silly fun</h3>
           <label class="row"><span>confetti <em>(click greeting × 5)</em></span><input type="checkbox" data-setting="confetti" class="toggle"></label>
           <label class="row"><span>cursor sparkles ✨</span><input type="checkbox" data-setting="cursor" class="toggle"></label>
@@ -563,6 +567,6 @@
   <!-- confetti container -->
   <div class="confetti" id="confetti" aria-hidden="true"></div>
 
-  <script src="app.v2.js?v=8"></script>
+  <script src="app.v2.js?v=10"></script>
 </body>
 </html>
