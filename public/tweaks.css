@@ -1,0 +1,102 @@
+/* tweaks.css — design overrides & feature additions on top of styles.css */
+
+/* ── cards fill their grid cell top-to-bottom ──
+   Each card is a flex column. The main content area inside stretches
+   to fill leftover space, so short-content cards never leave raw
+   background showing through (tiling WM behaviour). */
+.card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Generic rule: everything after card__head stretches to fill */
+.card__head ~ * { flex: 1; min-height: 0; }
+
+/* Per-card overrides where multiple siblings need different flex weights */
+.card--spotify .spotify        { flex: 1 1 0; min-height: 0; }
+.card--spotify .recent-tracks  { flex: 0 0 auto; }
+
+.card--discord .discord        { flex: 0 0 auto; }
+.card--discord .discord__history { flex: 1; min-height: 0; overflow-y: auto; }
+
+/* steam: items align to top, no stretching gap */
+.card--steam .steam-list       { flex: 1; min-height: 0; overflow-y: auto; align-content: start; }
+.card--steam .steam-list__footer { flex: 0 0 auto; }
+
+.card--wishlist .wishlist      { flex: 1; min-height: 0; }
+
+.card--news .news              { flex: 1; min-height: 0; overflow-y: auto; }
+
+.card--docker .docker          { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.card--docker .docker__summary { flex: 0 0 auto; }
+.card--docker .docker__list    { flex: 1; min-height: 0; overflow-y: auto; }
+
+.card--mc .mc                  { flex: 1; min-height: 0; justify-content: space-between; }
+
+/* ── edit mode ── */
+.edit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: var(--muted);
+  transition: color .2s, background .2s;
+}
+.edit-btn:hover,
+.edit-btn[aria-pressed="true"] {
+  color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+}
+
+/* cards in edit mode */
+[data-edit="on"] .card {
+  cursor: grab;
+  outline: 1.5px dashed color-mix(in oklab, var(--accent) 50%, transparent);
+  outline-offset: -2px;
+  transition: outline-color .15s, background .15s, opacity .15s;
+  user-select: none;
+}
+[data-edit="on"] .card:hover {
+  outline-color: var(--accent);
+}
+[data-edit="on"] .card--dragging {
+  opacity: 0.35;
+  cursor: grabbing;
+  outline-style: solid;
+}
+[data-edit="on"] .card--drag-over {
+  outline: 2px solid var(--accent);
+  background: color-mix(in oklab, var(--accent) 8%, var(--surface));
+}
+
+/* ── weather: spread sections across the full (2-row) card height ── */
+.card--weather .wx {
+  justify-content: space-between;
+}
+/* make hourly chart taller when card has extra room */
+.card--weather .wx__hours {
+  flex: 1;
+  max-height: 160px;
+}
+
+/* ── twitch: distribute streamers across the full (2-row) card height ── */
+.card--twitch .streamers {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.card--twitch .streamers li { list-style: none; }
+
+/* ── mc: space content so it fills the 2-row card ── */
+.card--mc .mc {
+  justify-content: space-between;
+}
+
+/* ── steam cover images (real Steam CDN headers) ── */
+.steam-game__cover[style*="backgroundImage"] {
+  background-color: transparent;
+}
