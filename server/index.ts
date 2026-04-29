@@ -13,6 +13,7 @@ const PORT = Number(process.env.PORT ?? 3000);
 const PUBLIC_DIR = new URL("../public/", import.meta.url).pathname;
 const MC_HOST = process.env.MC_HOST ?? "minecraft-main";
 const MC_PORT = Number(process.env.MC_PORT ?? 25565);
+const DOCKER_SOCKET = process.env.DOCKER_SOCKET ?? "/var/run/docker.sock";
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -55,7 +56,34 @@ const getCachedGamesNews = makeCache(15 * 60_000,  getGamesNews);
 // ── routes ──
 const apiRoutes: Record<string, () => Response | Promise<Response>> = {
   "/api/health":            () => json({ ok: true, ts: Date.now() }),
-  "/api/mc/status":         async () => json(await getMcStatus()),
+  "/api/mc/status":         async () => {
+    const mc = await getMcStatus();
+    if (!mc.online) return json(mc);
+    // Merge minecraft container CPU/RAM from docker stats
+    try {
+      const containers = await (await fetch("http://localhost/containers/json?all=true", {
+        unix: DOCKER_SOCKET, headers: { Host: "localhost" },
+      })).json() as any[];
+      const mcContainer = (containers as any[]).find((c: any) => (c.Names?.[0] ?? "").includes("minecraft"));
+      if (mcContainer && mcContainer.State === "running") {
+        const stats = await (await fetch(`http://localhost/containers/${mcContainer.Id}/stats?stream=false`, {
+          unix: DOCKER_SOCKET, headers: { Host: "localhost" },
+        })).json() as any;
+        const cpuDelta = stats.cpu_stats?.cpu_usage?.total_usage ?? 0;
+        const sysDelta = stats.cpu_stats?.system_cpu_usage ?? 0;
+        const preCpu = stats.precpu_stats?.cpu_usage?.total_usage ?? 0;
+        const preSys = stats.precpu_stats?.system_cpu_usage ?? 0;
+        const cpus = stats.cpu_stats?.online_cpus ?? 1;
+        const cpuPct = sysDelta > 0 ? Math.round(((cpuDelta - preCpu) / (sysDelta - preSys)) * cpus * 100 * 10) / 10 : 0;
+        const ramMb = Math.round((stats.memory_stats?.usage ?? 0) / (1024 * 1024) * 10) / 10;
+        const ramLimit = Math.round((stats.memory_stats?.limit ?? 0) / (1024 * 1024) * 10) / 10;
+        mc.cpu = cpuPct;
+        mc.ram = ramMb;
+        mc.ram_limit = ramLimit;
+      }
+    } catch {}
+    return json(mc);
+  },
   "/api/github/activity":   async () => {
     const d = await getCachedGithub();
     return d ? json(d) : notImplemented("github");

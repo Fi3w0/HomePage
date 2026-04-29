@@ -1127,6 +1127,48 @@ input, select, button { font: inherit; }
   background: var(--c1);
 }
 
+.mc__resources {
+  display: grid;
+  gap: 6px;
+  padding: 0 2px;
+}
+.mc__res {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.mc__res-lbl {
+  font-family: var(--f-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  width: 28px;
+}
+.mc__res-bar {
+  height: 4px;
+  background: var(--hairline);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mc__res-bar span {
+  display: block;
+  height: 100%;
+  width: var(--w);
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  border-radius: 2px;
+  transition: width .5s ease;
+}
+.mc__res-num {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+  width: 48px;
+  text-align: right;
+}
+
 /* ===========================================================
    STEAM
    =========================================================== */

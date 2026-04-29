@@ -698,6 +698,23 @@
         });
       }
     }
+
+    // CPU/RAM bars
+    const cpuBar = card.querySelector('#mc-cpu-bar');
+    const cpuNum = card.querySelector('#mc-cpu');
+    const ramBar = card.querySelector('#mc-ram-bar');
+    const ramNum = card.querySelector('#mc-ram');
+    if (d.cpu != null && cpuBar && cpuNum) {
+      const w = Math.min(d.cpu, 100);
+      cpuBar.style.setProperty('--w', w + '%');
+      cpuNum.textContent = d.cpu + '%';
+    }
+    if (d.ram != null && ramBar && ramNum) {
+      const limit = d.ram_limit || 16384;
+      const w = Math.min(d.ram / limit * 100, 100);
+      ramBar.style.setProperty('--w', w + '%');
+      ramNum.textContent = d.ram >= 1024 ? Math.round(d.ram / 1024 * 10) / 10 + 'gb' : d.ram + 'mb';
+    }
   }
 
   async function loadMc() { renderMc(await apiGet('/api/mc/status')); }
@@ -989,6 +1006,16 @@
 
       a.append(cover, main, bar); li.appendChild(a); ul.appendChild(li);
     });
+
+    // Last achievement
+    const achEl = $('#steam-ach');
+    if (achEl) {
+      achEl.textContent = data.achievement || '—';
+      const top = data.games[0];
+      if (top && data.achievement) {
+        achEl.textContent = `${data.achievement} — ${top.name}`;
+      }
+    }
   }
 
   async function loadSteam() { renderSteam(await apiGet('/api/steam/recent', { timeout: 8000 })); }

@@ -56,6 +56,9 @@ export interface McOnline {
   description: string;
   favicon?: string;
   ping_ms: number;
+  cpu?: number;
+  ram?: number;
+  ram_limit?: number;
 }
 export interface McOffline { online: false; error: string }
 export type McStatus = McOnline | McOffline;

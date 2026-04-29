@@ -10,8 +10,8 @@
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Geist:wght@300..700&family=JetBrains+Mono:wght@300..700&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="styles.css?v=16" />
-  <link rel="stylesheet" href="tweaks.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=18" />
+  <link rel="stylesheet" href="tweaks.css?v=9" />
 </head>
 <body>
   <!-- atmospheric layers -->
@@ -250,6 +250,12 @@
             <div class="mc__motd-line2" id="mc-motd2">—</div>
           </div>
 
+          <!-- cpu / ram bars -->
+          <div class="mc__resources">
+            <div class="mc__res"><span class="mc__res-lbl">cpu</span><span class="mc__res-bar"><span id="mc-cpu-bar" style="--w:0%"></span></span><span class="mc__res-num" id="mc-cpu">0%</span></div>
+            <div class="mc__res"><span class="mc__res-lbl">ram</span><span class="mc__res-bar"><span id="mc-ram-bar" style="--w:0%"></span></span><span class="mc__res-num" id="mc-ram">0mb</span></div>
+          </div>
+
           <!-- player count hero -->
           <div class="mc__players">
             <div class="mc__players-num"><span data-countup="0">0</span><span class="mc__players-max">/—</span></div>
@@ -315,7 +321,7 @@
         </ul>
         <div class="steam-list__footer">
           <span class="steam-list__ach-label">last achievement</span>
-          <span class="steam-list__ach">«Heir Apparent» — Hades II</span>
+          <span class="steam-list__ach" id="steam-ach">—</span>
         </div>
       </article>
 
@@ -557,6 +563,6 @@
   <!-- confetti container -->
   <div class="confetti" id="confetti" aria-hidden="true"></div>
 
-  <script src="app.v2.js?v=6"></script>
+  <script src="app.v2.js?v=8"></script>
 </body>
 </html>

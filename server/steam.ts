@@ -10,7 +10,7 @@ export interface SteamGame {
   cover: string;
   url: string;
 }
-export interface SteamRecent { games: SteamGame[] }
+export interface SteamRecent { games: SteamGame[]; achievement?: string; }
 
 function coverUrl(appid: number) {
   return `https://cdn.akamai.steamstatic.com/steam/apps/${appid}/header.jpg`;
@@ -62,24 +62,32 @@ export async function getSteamRecent(): Promise<SteamRecent | null> {
       }
     }
 
-    return { games };
+    // Fetch last achievement for the top game
+    const topGame = games[0];
+    const achievement = topGame ? await getLastAchievement(topGame.appid).catch(() => null) : null;
+
+    return { games, achievement: achievement ?? undefined };
   } catch (e) {
     console.error("Steam error:", e);
     return null;
   }
 }
 
-export interface WishlistItem {
-  appid: number;
-  name: string;
-  cover: string;
-  url: string;
-  price: string | null;
-  price_original: string | null;
-  discount_pct: number | null;
-  unreleased: boolean;
+// Fetch last unlocked achievement for the most recently played game
+async function getLastAchievement(appid: number): Promise<string | null> {
+  try {
+    const r = await fetch(
+      `https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=${KEY}&steamid=${STEAM_ID}&appid=${appid}&l=en`
+    );
+    if (!r.ok) return null;
+    const d = await r.json();
+    const achievements: any[] = d.playerstats?.achievements ?? [];
+    const unlocked = achievements.filter(a => a.achieved === 1);
+    if (unlocked.length === 0) return null;
+    const last = unlocked[unlocked.length - 1];
+    return `«${last.name}»`;
+  } catch { return null; }
 }
-export interface WishlistData { items: WishlistItem[] }
 
 export async function getSteamWishlist(): Promise<WishlistData | null> {
   if (!KEY || !STEAM_ID) return null;
