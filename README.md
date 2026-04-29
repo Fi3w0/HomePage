@@ -4,11 +4,17 @@
   <img src="https://img.shields.io/badge/theme-obsidian-a78bfa?style=flat-square" alt="obsidian">
 </p>
 
-# 🏠 fiw's HomePage
+<h1 align="center">🏠 fiw's HomePage</h1>
+<h3 align="center"><em>your new tab, but homelabbed.</em></h3>
 
-A live, self-hosted dashboard that replaces your browser's new tab — real-time widgets, themed to match your workspace.
+<p align="center">
+  A live, self-hosted dashboard that replaces your browser's new tab page —<br>
+  real-time widgets for your homelab, all inside a fully themed, pixel-perfect shell.
+</p>
 
-Runs behind Traefik at **home.fiwservers.lol**.
+<p align="center">
+  Running behind Traefik at <strong>home.fiwservers.lol</strong>.
+</p>
 
 ---
 
