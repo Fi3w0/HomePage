@@ -7,6 +7,7 @@ import { getDiscordPresence, type DiscordPresence } from "./discord";
 import { getSteamRecent, getSteamWishlist, type SteamRecent } from "./steam";
 import { getTechNews, getGamesNews, type NewsData } from "./news";
 import { getSpotifyData, type SpotifyData } from "./spotify";
+import { getDockerData, type DockerData } from "./docker";
 
 const PORT = Number(process.env.PORT ?? 3000);
 const PUBLIC_DIR = new URL("../public/", import.meta.url).pathname;
@@ -41,6 +42,7 @@ async function getMcStatus(): Promise<McStatus> {
   return data;
 }
 
+const getCachedDocker    = makeCache(30_000,        getDockerData);
 const getCachedSpotify   = makeCache(30_000,        getSpotifyData);
 const getCachedGithub    = makeCache(5 * 60_000,   getGithubActivity);
 const getCachedTwitch    = makeCache(60_000,        getTwitchFollowing);
@@ -86,7 +88,10 @@ const apiRoutes: Record<string, () => Response | Promise<Response>> = {
     const d = await getCachedDiscord();
     return d ? json(d) : notImplemented("discord");
   },
-  "/api/docker/list":       () => notImplemented("docker"),
+  "/api/docker/list":       async () => {
+    const d = await getCachedDocker();
+    return d ? json(d) : notImplemented("docker");
+  },
 };
 
 async function serveStatic(pathname: string): Promise<Response> {
@@ -96,7 +101,9 @@ async function serveStatic(pathname: string): Promise<Response> {
   if (!full.startsWith(PUBLIC_DIR)) return new Response("forbidden", { status: 403 });
   const f = file(full);
   if (!(await f.exists())) return new Response("not found", { status: 404 });
-  return new Response(f);
+  return new Response(f, {
+    headers: { "cache-control": "no-cache, must-revalidate" },
+  });
 }
 
 const server = Bun.serve({

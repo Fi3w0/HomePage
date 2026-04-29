@@ -19,7 +19,7 @@
     accent: '', font: 'default', radius: 'default', pageWidth: 'default',
     greetingStyle: 'formal',
     widgets: {
-      spotify:true, weather:true, discord:true, github:true, twitch:true,
+      spotify:true, discord:true, github:true, twitch:true,
       steam:true, mc:true, wishlist:true, docker:true, 'news-tech':true, 'news-games':true,
     },
   };
@@ -158,14 +158,13 @@
 
   // ─────────── tiling reflow ───────────
   // row 1: spotify(5) + discord(4) + github(3)  = 12
-  // row 2: weather(4) + twitch(5)  + mc(3)      = 12
+  // row 2: twitch(5)  + mc(3)                    = 12
   // row 3: steam(4)   + wishlist(4)+ docker(4)  = 12
   // row 4: news-tech(6) + news-games(6)         = 12
   const TILE_PREFS = {
     spotify:      { cols: 5, rows: 2, order:  1 },
     discord:      { cols: 4, rows: 2, order:  2 },
     github:       { cols: 3, rows: 2, order:  3 },
-    weather:      { cols: 4, rows: 2, order:  4 },
     twitch:       { cols: 5, rows: 2, order:  5 },
     mc:           { cols: 3, rows: 2, order:  6 },
     steam:        { cols: 4, rows: 2, order:  7 },
@@ -467,31 +466,30 @@
     if (games) renderNews(games, 'news-games-list', 'news-games-time');
   }
 
-  // ─────────── docker (mock until Phase 1.3) ───────────
-  const dockerMock = [
-    { name:'traefik',       img:'traefik:v2.11',           status:'up',   up:'3d' },
-    { name:'homepage',      img:'homepage:0.1',            status:'up',   up:'1h' },
-    { name:'minecraft-main',img:'itzg/minecraft-server',   status:'up',   up:'3d' },
-    { name:'discord-bot',   img:'discord-bot',             status:'up',   up:'3d' },
-    { name:'skyxern-api',   img:'skyxern-nexus-api',       status:'up',   up:'3d' },
-    { name:'website',       img:'skyxern-nexus-website',   status:'up',   up:'3d' },
-    { name:'portainer',     img:'portainer/portainer-ce',  status:'up',   up:'3d' },
-    { name:'glances',       img:'nicolargo/glances',       status:'up',   up:'3d' },
-  ];
-
-  function renderDocker() {
+  // ─────────── docker / homelab ───────────
+  function renderDocker(d) {
     const ul = $('#docker-list');
-    if (!ul) return;
-    ul.innerHTML = dockerMock.map(c => `
+    if (!ul || !d) return;
+
+    const nums = $$('.docker__summary .docker__sum-num');
+    if (nums[0]) { nums[0].dataset.countup = d.running; nums[0].textContent = d.running; }
+    if (nums[1]) { nums[1].dataset.countup = d.stopped; nums[1].textContent = d.stopped; }
+    if (nums[2]) nums[2].innerHTML = `${d.cpu}<small>%</small>`;
+    if (nums[3]) nums[3].innerHTML = `${d.ram}<small>g</small>`;
+
+    ul.innerHTML = d.containers.map(c => `
       <li class="docker__item">
         <span class="docker__item-dot ${c.status==='down'?'docker__item-dot--off':''}"></span>
         <span class="docker__item-name">${c.name}</span>
-        <span class="docker__item-img">${c.img}</span>
-        <span class="docker__item-up">${c.up}</span>
+        <span class="docker__item-img">${c.image}</span>
+        <span class="docker__item-up">${c.uptime}</span>
       </li>
     `).join('');
   }
 
+  async function loadDocker() { renderDocker(await apiGet('/api/docker/list', { timeout: 8000 })); }
+
+  // ─────────── weather ───────────
   // ─────────── search / bangs ───────────
   const BANGS = {
     g:   q => `https://www.google.com/search?q=${encodeURIComponent(q)}`,
@@ -996,49 +994,6 @@
   async function loadSteam() { renderSteam(await apiGet('/api/steam/recent', { timeout: 8000 })); }
 
   // ─────────── weather chart line ───────────
-  function buildWeatherLine() {
-    const chart = document.getElementById('wx-hours');
-    if (!chart) return;
-    chart.querySelectorAll('.wx__line-svg').forEach(el => el.remove());
-    const marks = chart.querySelectorAll('.wx__h-mark');
-    if (marks.length < 2) return;
-    const chartRect = chart.getBoundingClientRect();
-    if (chartRect.width === 0) return;
-    const pts = [];
-    marks.forEach(mark => {
-      const r = mark.getBoundingClientRect();
-      pts.push([r.left - chartRect.left + r.width / 2, r.top - chartRect.top + r.height / 2]);
-    });
-    const ns = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(ns, 'svg');
-    svg.classList.add('wx__line-svg');
-    svg.setAttribute('width', chartRect.width);
-    svg.setAttribute('height', chartRect.height);
-    svg.setAttribute('aria-hidden', 'true');
-    // gradient line
-    const defs = document.createElementNS(ns, 'defs');
-    const grad = document.createElementNS(ns, 'linearGradient');
-    grad.id = 'wx-line-grad';
-    grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0');
-    grad.setAttribute('x2', '1'); grad.setAttribute('y2', '0');
-    const s1 = document.createElementNS(ns, 'stop');
-    s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', 'var(--accent)'); s1.setAttribute('stop-opacity', '0.3');
-    const s2 = document.createElementNS(ns, 'stop');
-    s2.setAttribute('offset', '50%'); s2.setAttribute('stop-color', 'var(--accent)'); s2.setAttribute('stop-opacity', '0.7');
-    const s3 = document.createElementNS(ns, 'stop');
-    s3.setAttribute('offset', '100%'); s3.setAttribute('stop-color', 'var(--accent)'); s3.setAttribute('stop-opacity', '0.3');
-    grad.append(s1, s2, s3); defs.appendChild(grad); svg.appendChild(defs);
-    const poly = document.createElementNS(ns, 'polyline');
-    poly.setAttribute('points', pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' '));
-    poly.setAttribute('fill', 'none');
-    poly.setAttribute('stroke', 'url(#wx-line-grad)');
-    poly.setAttribute('stroke-width', '1.5');
-    poly.setAttribute('stroke-linecap', 'round');
-    poly.setAttribute('stroke-linejoin', 'round');
-    svg.appendChild(poly);
-    chart.insertBefore(svg, chart.firstChild);
-  }
-
   // ─────────── page visibility — pause bg animations when hidden ───────────
   function handleVisibility() {
     const state = document.hidden ? 'paused' : 'running';
@@ -1068,7 +1023,6 @@
     setInterval(updateClock, 1000);
     setInterval(updateGreeting, 60_000);
     buildHeatmap();
-    renderDocker();
     bindPanel();
     bindSearch();
     bindEasterEggs();
@@ -1076,7 +1030,6 @@
     rotateQuote();
     tickSync();
     setTimeout(animateCountUps, 350);
-    setTimeout(buildWeatherLine, 200);
 
     // providers — graceful: keep mock layout if api returns null
     loadMc();
@@ -1087,6 +1040,7 @@
     loadSteam();
     loadWishlist();
     loadNews();
+    loadDocker();
 
     setInterval(loadMc,       30_000);
     setInterval(loadSpotify,  30_000);
@@ -1096,6 +1050,7 @@
     setInterval(loadGithub,    5 * 60_000);
     setInterval(loadWishlist, 30 * 60_000);
     setInterval(loadNews,     15 * 60_000);
+    setInterval(loadDocker,   30_000);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

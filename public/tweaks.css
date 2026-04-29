@@ -72,16 +72,6 @@
   background: color-mix(in oklab, var(--accent) 8%, var(--surface));
 }
 
-/* ── weather: spread sections across the full (2-row) card height ── */
-.card--weather .wx {
-  justify-content: space-between;
-}
-/* make hourly chart taller when card has extra room */
-.card--weather .wx__hours {
-  flex: 1;
-  max-height: 160px;
-}
-
 /* ── twitch: distribute streamers across the full (2-row) card height ── */
 .card--twitch .streamers {
   flex: 1;

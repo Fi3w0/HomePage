@@ -10,8 +10,8 @@
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Geist:wght@300..700&family=JetBrains+Mono:wght@300..700&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="styles.css?v=11" />
-  <link rel="stylesheet" href="tweaks.css?v=5" />
+  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="stylesheet" href="tweaks.css?v=7" />
 </head>
 <body>
   <!-- atmospheric layers -->
@@ -127,43 +127,6 @@
         </div>
       </article>
 
-      <!-- ─── weather ─── -->
-      <article class="card card--weather" data-card="weather" style="--delay:1">
-        <header class="card__head">
-          <span class="card__eyebrow">elsewhere · today</span>
-          <span class="card__source" id="weather-loc">marbella</span>
-        </header>
-        <div class="wx">
-          <div class="wx__now">
-            <div class="wx__icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" width="62" height="62" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
-                <circle cx="32" cy="30" r="12"/>
-                <path d="M32 10v4M32 46v4M12 30h4M44 30h4M17 15l3 3M43 15l-3 3M17 45l3-3M43 45l-3-3"/>
-              </svg>
-            </div>
-            <div class="wx__num"><span id="wx-temp">23</span><sup>°c</sup></div>
-            <div class="wx__sub">
-              <div class="wx__cond" id="wx-cond">sunny</div>
-              <div class="wx__feels">feels 21° · wind 8kmh e</div>
-            </div>
-          </div>
-          <ul class="wx__hours" id="wx-hours">
-            <li><span class="wx__h-time">14</span><span class="wx__h-mark" style="--y:20%">●</span><span class="wx__h-temp">24°</span></li>
-            <li><span class="wx__h-time">16</span><span class="wx__h-mark" style="--y:14%">●</span><span class="wx__h-temp">25°</span></li>
-            <li><span class="wx__h-time">18</span><span class="wx__h-mark" style="--y:26%">●</span><span class="wx__h-temp">23°</span></li>
-            <li><span class="wx__h-time">20</span><span class="wx__h-mark" style="--y:42%">●</span><span class="wx__h-temp">21°</span></li>
-            <li><span class="wx__h-time">22</span><span class="wx__h-mark" style="--y:58%">●</span><span class="wx__h-temp">19°</span></li>
-            <li><span class="wx__h-time">00</span><span class="wx__h-mark" style="--y:70%">●</span><span class="wx__h-temp">18°</span></li>
-            <li><span class="wx__h-time">02</span><span class="wx__h-mark" style="--y:76%">●</span><span class="wx__h-temp">17°</span></li>
-          </ul>
-          <div class="wx__sun">
-            <span><i class="wx__dot wx__dot--up"></i>↑ 06:32</span>
-            <span><i class="wx__dot wx__dot--down"></i>↓ 20:41</span>
-            <span class="wx__sun-bar"><i style="--p:58%"></i></span>
-          </div>
-        </div>
-      </article>
-
       <!-- ─── github ─── -->
       <article class="card card--github" data-card="github" style="--delay:2">
         <header class="card__head">
@@ -276,30 +239,20 @@
           <span class="card__source">minecraft</span>
         </header>
         <div class="mc">
-          <!-- pixel block visual -->
-          <div class="mc__block-wrap" aria-hidden="true">
-            <div class="mc__pixel-block">
-              <span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span>
-            </div>
-          </div>
-
           <!-- status + motd -->
           <div class="mc__status-row">
             <div class="mc__status">
-              <span class="live-dot live-dot--green"></span>
-              <span class="mc__status-label">online</span>
-              <span class="mc__ping">38ms</span>
+              <span class="live-dot"></span>
+              <span class="mc__status-label">offline</span>
+              <span class="mc__ping">—</span>
             </div>
-            <div class="mc__motd-line1" id="mc-motd1">fiw's lonely cube</div>
-            <div class="mc__motd-line2" id="mc-motd2">1.21.4 · neoforge</div>
+            <div class="mc__motd-line1" id="mc-motd1">—</div>
+            <div class="mc__motd-line2" id="mc-motd2">—</div>
           </div>
 
           <!-- player count hero -->
           <div class="mc__players">
-            <div class="mc__players-num"><span data-countup="3">0</span><span class="mc__players-max">/8</span></div>
+            <div class="mc__players-num"><span data-countup="0">0</span><span class="mc__players-max">/—</span></div>
             <div class="mc__players-meta">
               <span class="mc__players-lbl">online now</span>
               <ul class="mc__players-list">
@@ -309,7 +262,6 @@
               </ul>
             </div>
           </div>
-
         </div>
       </article>
 
@@ -386,10 +338,10 @@
         </header>
         <div class="docker">
           <div class="docker__summary">
-            <div class="docker__sum-stat"><span class="docker__sum-num" data-countup="9">0</span><span class="docker__sum-lbl">running</span></div>
-            <div class="docker__sum-stat"><span class="docker__sum-num docker__sum-num--off" data-countup="1">0</span><span class="docker__sum-lbl">stopped</span></div>
-            <div class="docker__sum-stat"><span class="docker__sum-num">11.4<small>%</small></span><span class="docker__sum-lbl">cpu</span></div>
-            <div class="docker__sum-stat"><span class="docker__sum-num">2.1<small>g</small></span><span class="docker__sum-lbl">ram</span></div>
+            <div class="docker__sum-stat"><span class="docker__sum-num">0</span><span class="docker__sum-lbl">running</span></div>
+            <div class="docker__sum-stat"><span class="docker__sum-num docker__sum-num--off">0</span><span class="docker__sum-lbl">stopped</span></div>
+            <div class="docker__sum-stat"><span class="docker__sum-num">0<small>%</small></span><span class="docker__sum-lbl">cpu</span></div>
+            <div class="docker__sum-stat"><span class="docker__sum-num">0<small>g</small></span><span class="docker__sum-lbl">ram</span></div>
           </div>
           <ul class="docker__list" id="docker-list">
             <!-- populated by app.js -->
@@ -423,9 +375,9 @@
 
     <!-- ─────────── colophon ─────────── -->
     <footer class="colophon">
-      <span class="colophon__left">synced <span id="last-sync">just now</span> · placeholder data · all systems nominal</span>
+      <span class="colophon__left">synced <span id="last-sync">just now</span> · all systems nominal</span>
       <span class="colophon__center" id="colophon-quote">— if found, please return to firefox.</span>
-      <span class="colophon__right">home · v0.2 · obsidian</span>
+      <span class="colophon__right">home · v0.2</span>
     </footer>
   </main>
 
@@ -580,7 +532,6 @@
         <section class="panel__section">
           <h3 class="panel__section-title">widgets</h3>
           <label class="row"><span>spotify</span><input type="checkbox" data-toggle="spotify" class="toggle" checked></label>
-          <label class="row"><span>weather</span><input type="checkbox" data-toggle="weather" class="toggle" checked></label>
           <label class="row"><span>discord</span><input type="checkbox" data-toggle="discord" class="toggle" checked></label>
           <label class="row"><span>github</span><input type="checkbox" data-toggle="github" class="toggle" checked></label>
           <label class="row"><span>twitch</span><input type="checkbox" data-toggle="twitch" class="toggle" checked></label>
@@ -597,7 +548,7 @@
         </section>
 
         <footer class="panel__foot">
-          home · v0.2 obsidian · made for fiw
+          home · v0.2 · made for fiw
         </footer>
       </div>
     </div>
@@ -606,6 +557,6 @@
   <!-- confetti container -->
   <div class="confetti" id="confetti" aria-hidden="true"></div>
 
-  <script src="app.v2.js?v=1"></script>
+  <script src="app.v2.js?v=6"></script>
 </body>
 </html>
