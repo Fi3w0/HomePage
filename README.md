@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/status-live-22c55e?style=flat-square" alt="status">
-  <img src="https://img.shields.io/badge/stack-bun-?style=flat-square&color=f9a8d4" alt="bun">
-  <img src="https://img.shields.io/badge/theme-obsidian-?style=flat-square&color=a78bfa" alt="obsidian">
+  <img src="https://img.shields.io/badge/stack-bun-f9a8d4?style=flat-square" alt="bun">
+  <img src="https://img.shields.io/badge/theme-obsidian-a78bfa?style=flat-square" alt="obsidian">
 </p>
 
 # 🏠 fiw's HomePage
